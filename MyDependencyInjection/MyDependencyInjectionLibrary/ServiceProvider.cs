@@ -2,6 +2,7 @@
 {
     public class ServiceProvider
     {
+        // Lazy because we want to create the singleton after the other types have been already registered
         private readonly Dictionary<Type, Lazy<object>> _singletons = new();
         private readonly Dictionary<Type, Func<object>> _transients = new();
         public ServiceProvider(ServiceCollection serviceCollection)
