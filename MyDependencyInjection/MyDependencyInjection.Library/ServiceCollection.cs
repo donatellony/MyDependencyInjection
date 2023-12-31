@@ -1,4 +1,4 @@
-﻿namespace MyDependencyInjectionLibrary
+﻿namespace MyDependencyInjection.Library
 {
     public class ServiceCollection : List<ServiceDescriptor>
     {

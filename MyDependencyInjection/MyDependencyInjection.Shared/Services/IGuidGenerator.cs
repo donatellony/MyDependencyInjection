@@ -1,4 +1,4 @@
-﻿namespace MyDependencyInjectionConsoleApp.Services
+﻿namespace MyDependencyInjection.Shared.Services
 {
     public interface IGuidGenerator
     {

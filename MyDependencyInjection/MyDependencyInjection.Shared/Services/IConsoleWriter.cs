@@ -1,4 +1,4 @@
-﻿namespace MyDependencyInjectionConsoleApp.Services
+﻿namespace MyDependencyInjection.Shared.Services
 {
     // Interface is created to make the Console.Writeline mockable
     public interface IConsoleWriter

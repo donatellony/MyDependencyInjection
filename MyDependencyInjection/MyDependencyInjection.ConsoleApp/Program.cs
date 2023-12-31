@@ -1,5 +1,6 @@
-﻿using MyDependencyInjectionConsoleApp.Services;
-using MyDependencyInjectionLibrary;
+﻿
+using MyDependencyInjection.Shared.Services;
+using MyDependencyInjection.Library;
 
 // WARNING - USING MULTIPLE SERVICE PROVIDERS CAN BE DANGEROUS AND LEAD TO UNPREDICTABLE ERRORS!!!!!!
 // I'm using them ONLY to demonstrate different lifetimes
