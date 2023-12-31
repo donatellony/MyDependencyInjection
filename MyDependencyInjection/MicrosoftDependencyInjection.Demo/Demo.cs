@@ -1,11 +1,11 @@
 using MyDependencyInjection.Shared;
 
-namespace MicrosoftDependencyInjectionExamples;
+namespace MicrosoftDependencyInjection.Demo;
 
-public class Demo : IDemo
+public sealed class Demo : IDemo
 {
     public void Run()
     {
-        throw new NotImplementedException();
+
     }
 }

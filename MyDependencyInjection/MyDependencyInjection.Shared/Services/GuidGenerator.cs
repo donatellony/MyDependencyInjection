@@ -1,5 +1,8 @@
 ﻿namespace MyDependencyInjection.Shared.Services
 {
+    /// <summary>
+    /// Depends on DateTimeProvider
+    /// </summary>
     public class GuidGenerator : IGuidGenerator
     {
         private readonly IDateTimeProvider _dateTimeProvider;

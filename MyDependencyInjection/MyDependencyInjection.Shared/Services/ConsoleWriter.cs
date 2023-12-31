@@ -1,5 +1,8 @@
 ﻿namespace MyDependencyInjection.Shared.Services
 {
+    /// <summary>
+    /// Depends on GuidGenerator, which depends on DateTimeProvider
+    /// </summary>
     public class ConsoleWriter : IConsoleWriter
     {
         private readonly IGuidGenerator _guidGenerator;

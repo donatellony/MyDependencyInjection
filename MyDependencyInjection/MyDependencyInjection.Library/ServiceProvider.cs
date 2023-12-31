@@ -6,22 +6,72 @@
         private readonly Dictionary<Type, Lazy<object>> _singletons = new();
         private readonly Dictionary<Type, Lazy<object>> _scopedInstances = new();
         private readonly Dictionary<Type, Func<object>> _transients = new();
+        private readonly ServiceCollection _serviceCollection;
 
         public ServiceProvider(ServiceCollection serviceCollection)
         {
-            RegisterTypes(serviceCollection);
+            _serviceCollection = serviceCollection;
+            RegisterTypes(_serviceCollection);
         }
+
+        private ServiceProvider(IDictionary<Type, Lazy<object>> singletons,
+            ServiceCollection serviceCollection)
+        {
+            foreach (var singleton in singletons)
+            {
+                _singletons.Add(singleton.Key, singleton.Value);
+            }
+
+            _serviceCollection = serviceCollection;
+            var nonSingletonServiceCollection =
+                serviceCollection
+                    .Where(desc => desc.Lifetime != ServiceLifetime.Singleton)
+                    .ToList();
+            RegisterTypes(nonSingletonServiceCollection);
+        }
+
 
         public TService? GetService<TService>()
         {
             return (TService?)GetService(typeof(TService));
         }
 
+        public ServiceScope CreateScope()
+        {
+            return new ServiceScope(this);
+        }
+
         private object? GetService(Type serviceType)
         {
-            if (TryGetSingleton(serviceType, out var valueValue)) return valueValue;
+            if (TryGetScoped(serviceType, out var scoped)) return scoped;
+            if (TryGetSingleton(serviceType, out var singleton)) return singleton;
+            if (TryGetTransient(serviceType, out var transient)) return transient;
 
-            return _transients[serviceType]?.Invoke();
+            return null;
+        }
+
+        private bool TryGetScoped(Type serviceType, out object? value)
+        {
+            if (!_scopedInstances.TryGetValue(serviceType, out var scoped))
+            {
+                value = null;
+                return false;
+            }
+
+            value = scoped.Value;
+            return true;
+        }
+
+        private bool TryGetTransient(Type serviceType, out object? value)
+        {
+            if (!_transients.TryGetValue(serviceType, out var transient))
+            {
+                value = null;
+                return false;
+            }
+
+            value = transient.Invoke();
+            return true;
         }
 
         private bool TryGetSingleton(Type serviceType, out object? value)
@@ -31,12 +81,12 @@
                 value = null;
                 return false;
             }
-            
+
             value = singleton.Value;
             return true;
         }
 
-        private ServiceProvider RegisterTypes(ServiceCollection serviceCollection)
+        private ServiceProvider RegisterTypes(IEnumerable<ServiceDescriptor> serviceCollection)
         {
             foreach (var serviceDescriptor in serviceCollection)
             {
@@ -91,6 +141,11 @@
         {
             return Activator.CreateInstance(serviceDescriptor.ImplementationType,
                 GetConstructorParameters(serviceDescriptor))!;
+        }
+
+        internal ServiceProvider GetScopedClone()
+        {
+            return new ServiceProvider(_singletons, _serviceCollection);
         }
     }
 }

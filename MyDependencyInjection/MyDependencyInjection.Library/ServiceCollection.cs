@@ -26,13 +26,23 @@
         {
             return AddDescriptor<TImplementation, TImplementation>(ServiceLifetime.Transient);
         }
+        
+        public ServiceCollection AddScoped<TService, TImplementation>() where TService : class
+            where TImplementation : class, TService
+        {
+            return AddDescriptor<TService, TImplementation>(ServiceLifetime.Scoped);
+        }
+        public ServiceCollection AddScoped<TImplementation>() where TImplementation : class
+        {
+            return AddDescriptor<TImplementation, TImplementation>(ServiceLifetime.Scoped);
+        }
 
         private ServiceCollection AddDescriptor<TService, TImplementation>(ServiceLifetime lifetime)
             where TService : class
             where TImplementation : class, TService
         {
             Add(
-                new ServiceDescriptor()
+                new ServiceDescriptor
                 {
                     ServiceType = typeof(TService),
                     ImplementationType = typeof(TImplementation),

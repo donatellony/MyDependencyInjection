@@ -1,12 +1,15 @@
 namespace MyDependencyInjection.Library;
 
-public class ServiceScope
+public class ServiceScope : IDisposable
 {
     public readonly ServiceProvider ServiceProvider;
-    private readonly ServiceProvider _originalServiceProvider;
 
     internal ServiceScope(ServiceProvider serviceProvider)
     {
-        _originalServiceProvider = serviceProvider;
+        ServiceProvider = serviceProvider.GetScopedClone();
+    }
+
+    public void Dispose()
+    {
     }
 }

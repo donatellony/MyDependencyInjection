@@ -8,6 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MicrosoftDependencyInjection.Demo\MicrosoftDependencyInjection.Demo.csproj" />
+    <ProjectReference Include="..\MyDependencyInjection.Demo\MyDependencyInjection.Demo.csproj" />
     <ProjectReference Include="..\MyDependencyInjection.Shared\MyDependencyInjection.Shared.csproj" />
     <ProjectReference Include="..\MyDependencyInjection.Library\MyDependencyInjection.Library.csproj" />
   </ItemGroup>
